@@ -23,8 +23,28 @@ Learn progressive web app - based on Google Developers [Tutorial](https://develo
 - What other UI components are key to our app?
 - What other resources you app needs? example: images, styles, js
 
-App shell:
+
 ![app-shell](readme-images/app-shell.png)
+
+
+##### What are Service Workers?
+
+A service worker is a script that is run by your browser in the background, separate from a web page, opening the door to features which don't need a web page or user interaction.
+
+They provide foundation for:
+
+- offline experience
+- background sync
+- push notification
+- geofencing
+- caching
+
+Service worker functionality is only available on pages that are accessed via HTTPS.
+
+Steps to add the Service Worker in your app:
+
+1. Create a JavaScript file that will be the service worker (must live in the app root)
+2. Check if the browser support it and register the JavaScript file as the service worker.
 
 
 ### How to run this repo:
@@ -33,14 +53,10 @@ Run a simple web server with ```python -m SimpleHTTPServer 8000``` then visit: `
 
 ### References
 
-Excellent article by Addy Osmani [here](https://addyosmani.com/blog/getting-started-with-progressive-web-apps/)
-
-[Service Workers](http://www.html5rocks.com/en/tutorials/service-worker/introduction/)
-
-[Service Workers Cookbook](https://serviceworke.rs/)
-
-[Building Flipkart Lite: A Progressive Web App](https://medium.com/@AdityaPunjani/building-flipkart-lite-a-progressive-web-app-2c211e641883#.jnt977z1l)
-
-[Flipkart](http://tech-blog.flipkart.net/2015/11/progressive-web-app/)
-
-[Offline Cookbook](https://jakearchibald.com/2014/offline-cookbook/)
+- Excellent article by Addy Osmani [here](https://addyosmani.com/blog/getting-started-with-progressive-web-apps/)
+- [Service Workers](http://www.html5rocks.com/en/tutorials/service-worker/introduction/)
+- [Service Workers Cookbook](https://serviceworke.rs/)
+- [Building Flipkart Lite: A Progressive Web App](https://medium.com/@AdityaPunjani/building-flipkart-lite-a-progressive-web-app-2c211e641883#.jnt977z1l)
+- [Flipkart](http://tech-blog.flipkart.net/2015/11/progressive-web-app/)
+- [Offline Cookbook](https://jakearchibald.com/2014/offline-cookbook/)
+- Avoid edge cases when caching in production using Service Workers [sw-precache](https://github.com/GoogleChrome/sw-precache)

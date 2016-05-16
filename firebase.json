@@ -1,0 +1,9 @@
+{
+  "firebase": "pwa-weather-app",
+  "public": "public",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}

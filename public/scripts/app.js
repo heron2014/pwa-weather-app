@@ -1,7 +1,7 @@
-
 (function() {
   'use strict';
 
+  // Insert injected weather forecast here
   var initialWeatherForecast = {
     key: 'newyork',
     label: 'New York, NY',
@@ -29,9 +29,9 @@
     }
   };
 
-
   var app = {
     isLoading: true,
+    hasRequestPending: false,
     visibleCards: {},
     selectedCities: [],
     spinner: document.querySelector('.loader'),
@@ -66,6 +66,7 @@
     var label = selected.textContent;
     app.getForecast(key, label);
     app.selectedCities.push({key: key, label: label});
+    app.saveSelectedCities();
     app.toggleAddDialog(false);
   });
 
@@ -152,6 +153,23 @@
   app.getForecast = function(key, label) {
     var url = 'https://publicdata-weather.firebaseio.com/';
     url += key + '.json';
+    if ('caches' in window) {
+      caches.match(url).then(function(response) {
+        if (response) {
+          response.json().then(function(json) {
+            // Only update if the XHR is still pending, otherwise the XHR
+            // has already returned and provided the latest data.
+            if (app.hasRequestPending) {
+              console.log('[App] Forecast Updated From Cache');
+              json.key = key;
+              json.label = label;
+              app.updateForecastCard(json);
+            }
+          });
+        }
+      });
+    }
+    app.hasRequestPending = true;
     // Make the XHR to get the data, then update the card
     var request = new XMLHttpRequest();
     request.onreadystatechange = function() {
@@ -161,6 +179,7 @@
           response.key = key;
           response.label = label;
           app.hasRequestPending = false;
+          console.log('[App] Forecast Updated From Network');
           app.updateForecastCard(response);
         }
       }
@@ -177,20 +196,19 @@
     });
   };
 
-
-    // Save list of cities to localStorage, see note below about localStorage.
+  // Save list of cities to localStorage, see note below about localStorage.
   app.saveSelectedCities = function() {
     var selectedCities = JSON.stringify(app.selectedCities);
     // IMPORTANT: See notes about use of localStorage.
     localStorage.selectedCities = selectedCities;
   };
 
-  /****************************************************************************
+  /*****************************************************************************
    *
    * Code required to start the app
    *
    * NOTE: To simplify this getting started guide, we've used localStorage.
-   *   localStorage is a synchronous API and has serious performance
+   *   localStorage is a syncronous API and has serious performance
    *   implications. It should not be used in production applications!
    *   Instead, check out IDB (https://www.npmjs.com/package/idb) or
    *   SimpleDB (https://gist.github.com/inexorabletash/c8069c042b734519680c)
@@ -211,15 +229,11 @@
     app.saveSelectedCities();
   }
 
-
-    /****************************************************************************
-     Register service worker
-     ****************************************************************************/
-
-     if('serviceWorker' in navigator) {
-       navigator.serviceWorker
-        .register('/service-worker.js')
-          .then(function() { console.log('Service Worker Registered'); });
-    }
+  // Add feature check for Service Workers here
+  if('serviceWorker' in navigator) {
+    navigator.serviceWorker
+             .register('/service-worker.js')
+             .then(function() { console.log('Service Worker Registered'); });
+  }
 
 })();

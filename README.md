@@ -41,6 +41,8 @@ They provide foundation for:
 
 Service worker functionality is only available on pages that are accessed via HTTPS.
 
+Choosing the right caching strategy for your data is vital and depends on the type of data your app presents. For example, time sensitive data like weather or stock quotes should be as fresh as possible, while avatar images or article content can be updated less frequently.
+
 Steps to add the Service Worker in your app:
 
 1. Create a JavaScript file that will be the service worker (must live in the app root)
@@ -51,6 +53,10 @@ Steps to add the Service Worker in your app:
 
 Run a simple web server with ```python -m SimpleHTTPServer 8000``` then visit: ```http://localhost:8000/```
 
+App is live at https://pwa-weather-app.firebaseapp.com
+
+#### Steps to deploy on Firebase Https server [here](https://developers.google.com/web/fundamentals/getting-started/your-first-progressive-web-app/step-08?hl=en)
+
 ### References
 
 - Excellent article by Addy Osmani [here](https://addyosmani.com/blog/getting-started-with-progressive-web-apps/)
@@ -60,3 +66,4 @@ Run a simple web server with ```python -m SimpleHTTPServer 8000``` then visit: `
 - [Flipkart](http://tech-blog.flipkart.net/2015/11/progressive-web-app/)
 - [Offline Cookbook](https://jakearchibald.com/2014/offline-cookbook/)
 - Avoid edge cases when caching in production using Service Workers [sw-precache](https://github.com/GoogleChrome/sw-precache)
+- [learn-progressive-enhancement](https://github.com/nelsonic/learn-progressive-enhancement)

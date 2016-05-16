@@ -1,7 +1,5 @@
-//https://developers.google.com/web/fundamentals/getting-started/your-first-progressive-web-app/step-04?hl=en
-
-var cacheName = 'weatherPWA-1';
-
+var dataCacheName = 'weatherData-v1';
+var cacheName = 'weatherPWA-step-7-1';
 var filesToCache = [
   '/',
   '/index.html',
@@ -11,8 +9,8 @@ var filesToCache = [
   '/images/cloudy-scattered-showers.png',
   '/images/cloudy.png',
   '/images/fog.png',
-  '/images/ic\_add\_white\_24px.svg',
-  '/images/ic\_refresh\_white\_24px.svg',
+  '/images/ic_add_white_24px.svg',
+  '/images/ic_refresh_white_24px.svg',
   '/images/partly-cloudy.png',
   '/images/rain.png',
   '/images/scattered-showers.png',
@@ -26,7 +24,7 @@ self.addEventListener('install', function(e) {
   console.log('[ServiceWorker] Install');
   e.waitUntil(
     caches.open(cacheName).then(function(cache) {
-      console.log('[ServiceWorker] Caching app shell');
+      console.log('[ServiceWorker] Caching App Shell');
       return cache.addAll(filesToCache);
     })
   );
@@ -48,9 +46,23 @@ self.addEventListener('activate', function(e) {
 
 self.addEventListener('fetch', function(e) {
   console.log('[ServiceWorker] Fetch', e.request.url);
-  e.respondWith(
-    caches.match(e.request).then(function(response) {
-      return response || fetch(e.request);
-    })
-  );
+  var dataUrl = 'https://publicdata-weather.firebaseio.com/';
+  if (e.request.url.indexOf(dataUrl) === 0) {
+    e.respondWith(
+      fetch(e.request)
+        .then(function(response) {
+          return caches.open(dataCacheName).then(function(cache) {
+            cache.put(e.request.url, response.clone());
+            console.log('[ServiceWorker] Fetched&Cached Data');
+            return response;
+          });
+        })
+    );
+  } else {
+    e.respondWith(
+      caches.match(e.request).then(function(response) {
+        return response || fetch(e.request);
+      })
+    );
+  }
 });
